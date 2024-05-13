@@ -18,15 +18,20 @@ const answerField = document.getElementById('answerField');
 function startNewGame() {
     // Проверяем, можно ли интерпретировать введенные значения как числа
     // Если не удалось, используем значения по умолчанию
-    minValue = parseInt(prompt('Минимальное число для игры', '0')) || 0;
-    maxValue = parseInt(prompt('Максимальное число для игры', '1000')) || 1000;
+    let newMinValue = parseInt(prompt('Минимальное число для игры', '0')) || 0;
+    let newMaxValue = parseInt(prompt('Максимальное число для игры', '1000')) || 1000;
 
     // Гарантируем, что минимальное значение меньше или равно максимальному
-    if (minValue > maxValue) {
-        const temp = minValue;
-        minValue = maxValue;
-        maxValue = temp;
+    if (newMinValue > newMaxValue) {
+        const temp = newMinValue;
+        newMinValue = newMaxValue;
+        newMaxValue = temp;
     }
+
+    // Проверяем, превышает ли новое минимальное значение -999
+    minValue = newMinValue < -999 ? -999 : newMinValue;
+    // Проверяем, превышает ли новое максимальное значение 999
+    maxValue = newMaxValue > 999 ? 999 : newMaxValue;
 
     // Определяем переменные для текущего состояния игры
     guessedNumber = Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
@@ -35,8 +40,6 @@ function startNewGame() {
     orderNumberField.innerText = orderNumber;
     updateQuestionText(guessedNumber); // Обновляем текст вопроса с новым числом
 }
-
-
 
 // Инициализация игры при загрузке страницы
 window.onload = function() {
