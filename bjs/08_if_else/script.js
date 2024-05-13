@@ -16,19 +16,26 @@ const answerField = document.getElementById('answerField');
 
 // Функция для начала новой игры
 function startNewGame() {
-    minValue = parseInt(prompt('Минимальное число для игры', '0'));
-    maxValue = parseInt(prompt('Максимальное число для игры', '1000'));
-    
-    // Проверяем корректность введенных значений и устанавливаем границы диапазона
-    minValue = isNaN(minValue) ? 0 : minValue;
-    maxValue = isNaN(maxValue) ? 1000 : maxValue;
+    // Проверяем, можно ли интерпретировать введенные значения как числа
+    // Если не удалось, используем значения по умолчанию
+    minValue = parseInt(prompt('Минимальное число для игры', '0')) || 0;
+    maxValue = parseInt(prompt('Максимальное число для игры', '1000')) || 1000;
 
+    // Гарантируем, что минимальное значение меньше или равно максимальному
+    if (minValue > maxValue) {
+        const temp = minValue;
+        minValue = maxValue;
+        maxValue = temp;
+    }
+
+    // Определяем переменные для текущего состояния игры
     guessedNumber = Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
     orderNumber = 1;
     gameRun = true;
     orderNumberField.innerText = orderNumber;
     updateQuestionText(guessedNumber); // Обновляем текст вопроса с новым числом
 }
+
 
 
 // Инициализация игры при загрузке страницы
@@ -92,7 +99,6 @@ function updateQuestionText(number) {
         `Да это легко! Ты загадал ${number}?`,
         `Наверное, это число ${number}?`,
         `Может быть, это ${number}?`
-        // Добавь еще варианты здесь по вашему желанию
     ];
     const randomIndex = Math.floor(Math.random() * questionVariants.length);
     const selectedQuestion = questionVariants[randomIndex];
