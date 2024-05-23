@@ -1,11 +1,6 @@
-let minValue = parseInt(prompt('Минимальное число для игры', '0'));
-let maxValue = parseInt(prompt('Максимальное число для игры', '1000'));
-
-// Проверяем корректность введенных значений и устанавливаем границы диапазона
-minValue = isNaN(minValue) ? 0 : minValue;
-maxValue = isNaN(maxValue) ? 1000 : maxValue;
-
-// Определяем переменные для хранения текущего состояния игры
+// Инициализация переменных для хранения текущего состояния игры
+let minValue;
+let maxValue;
 let guessedNumber;
 let orderNumber = 1;
 let gameRun = true;
@@ -18,20 +13,20 @@ const answerField = document.getElementById('answerField');
 function startNewGame() {
     // Проверяем, можно ли интерпретировать введенные значения как числа
     // Если не удалось, используем значения по умолчанию
-    let newMinValue = parseInt(prompt('Минимальное число для игры', '0')) || 0;
-    let newMaxValue = parseInt(prompt('Максимальное число для игры', '1000')) || 1000;
+    minValue = parseInt(prompt('Минимальное число для игры', '0')) || 0;
+    maxValue = parseInt(prompt('Максимальное число для игры', '1000')) || 1000;
 
     // Гарантируем, что минимальное значение меньше или равно максимальному
-    if (newMinValue > newMaxValue) {
-        const temp = newMinValue;
-        newMinValue = newMaxValue;
-        newMaxValue = temp;
+    if (minValue > maxValue) {
+        const temp = minValue;
+        minValue = maxValue;
+        maxValue = temp;
     }
 
     // Проверяем, превышает ли новое минимальное значение -999
-    minValue = newMinValue < -999 ? -999 : newMinValue;
+    minValue = minValue < -999 ? -999 : minValue;
     // Проверяем, превышает ли новое максимальное значение 999
-    maxValue = newMaxValue > 999 ? 999 : newMaxValue;
+    maxValue = maxValue > 999 ? 999 : maxValue;
 
     // Определяем переменные для текущего состояния игры
     guessedNumber = Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
@@ -107,4 +102,3 @@ function updateQuestionText(number) {
     const selectedQuestion = questionVariants[randomIndex];
     answerField.textContent = selectedQuestion;
 }
-
