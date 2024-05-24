@@ -9,26 +9,23 @@ let gameRun = true;
 const orderNumberField = document.getElementById('orderNumberField');
 const answerField = document.getElementById('answerField');
 
-// Функция для начала новой игры
-function startNewGame() {
-    // Проверяем, можно ли интерпретировать введенные значения как числа
-    // Если не удалось, используем значения по умолчанию
-    minValue = parseInt(prompt('Минимальное число для игры', '0')) || 0;
-    maxValue = parseInt(prompt('Максимальное число для игры', '1000')) || 1000;
+// Функция для начала новой игры с использованием prompt и alert
+function startNewGamePrompt() {
+    let inputMinValue = prompt('Введите минимальное число для игры', '0');
+    let inputMaxValue = prompt('Введите максимальное число для игры', '1000');
 
-    // Гарантируем, что минимальное значение меньше или равно максимальному
+    minValue = parseInt(inputMinValue) || 0;
+    maxValue = parseInt(inputMaxValue) || 1000;
+
     if (minValue > maxValue) {
         const temp = minValue;
         minValue = maxValue;
         maxValue = temp;
     }
 
-    // Проверяем, превышает ли новое минимальное значение -999
     minValue = minValue < -999 ? -999 : minValue;
-    // Проверяем, превышает ли новое максимальное значение 999
     maxValue = maxValue > 999 ? 999 : maxValue;
 
-    // Определяем переменные для текущего состояния игры
     guessedNumber = Math.floor(Math.random() * (maxValue - minValue + 1)) + minValue;
     orderNumber = 1;
     gameRun = true;
@@ -36,14 +33,14 @@ function startNewGame() {
     updateQuestionText(guessedNumber); // Обновляем текст вопроса с новым числом
 }
 
-// Инициализация игры при загрузке страницы
+// Инициализация игры при загрузке страницы с использованием prompt и alert
 window.onload = function() {
-    startNewGame();
-}
+    startNewGamePrompt();
+};
 
 // Обработчики событий для кнопок
 document.getElementById('btnRetry').addEventListener('click', function() {
-    startNewGame();
+    startNewGamePrompt();
 });
 
 document.getElementById('btnOver').addEventListener('click', function() {
@@ -102,3 +99,42 @@ function updateQuestionText(number) {
     const selectedQuestion = questionVariants[randomIndex];
     answerField.textContent = selectedQuestion;
 }
+
+// Функция для приведения числа к текстовой форме
+function numberToText(number) {
+    const units = ['', 'один', 'два', 'три', 'четыре', 'пять', 'шесть', 'семь', 'восемь', 'девять'];
+    const teens = ['десять', 'одиннадцать', 'двенадцать', 'тринадцать', 'четырнадцать', 'пятнадцать', 'шестнадцать', 'семнадцать', 'восемнадцать', 'девятнадцать'];
+    const tens = ['', '', 'двадцать', 'тридцать', 'сорок', 'пятьдесят', 'шестьдесят', 'семьдесят', 'восемьдесят', 'девяносто'];
+    const hundreds = ['','сто', 'двести', 'триста', 'четыреста', 'пятьсот', 'шестьсот', 'семьсот', 'восемьсот', 'девятьсот'];
+
+    if (number === 0) return 'ноль';
+    
+    let text = '';
+    
+    if (number < 0) {
+        text += 'минус ';
+        number = Math.abs(number);
+    }
+    
+    if (number >= 100) {
+        text += hundreds[Math.floor(number / 100)] + ' ';
+        number %= 100;
+    }
+    
+    if (number >= 20) {
+        text += tens[Math.floor(number / 10)] + ' ';
+        number %= 10;
+    }
+    
+    if (number >= 10) {
+        text += teens[number - 10] + ' ';
+        number = 0;
+    }
+    
+    if (number > 0) {
+        text += units[number];
+    }
+    
+    return text.trim();
+}
+
