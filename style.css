@@ -57,3 +57,10 @@ body {
 .btn-link:focus, .btn-link:hover {
     text-decoration: underline;
 }
+
+#inputFields {
+    margin-bottom: 10px;
+}
+#inputFields input {
+    margin: 5px;
+}
