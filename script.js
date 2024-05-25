@@ -26,6 +26,12 @@ btnOver.addEventListener('click', guessMore);
 btnLess.addEventListener('click', guessLess);
 btnEqual.addEventListener('click', guessEqual);
 
+// Устанавливаем начальное состояние кнопок при загрузке страницы
+btnLess.disabled = true;
+btnOver.disabled = true;
+btnRetry.disabled = true;
+btnEqual.disabled = true;
+
 // Функция для начала новой игры
 function startNewGame() {
     minValue = parseInt(minValueInput.value) || 0;
@@ -44,10 +50,22 @@ function startNewGame() {
     minValue = Math.max(minValue, -999);
     maxValue = Math.min(maxValue, 999);
 
+    // Проверяем, что пользователь ввел значения
+    if (minValueInput.value === '' || maxValueInput.value === '') {
+        answerField.innerText = "Введите значения для начала игры";
+        return;
+    }
+
     // Используем бинарный поиск для угадывания числа
     guessedNumber = Math.floor((minValue + maxValue) / 2);
     orderNumber = 1;
     gameRun = true;
+
+    // Разблокировать кнопки только если игра начата и значения введены
+    btnLess.disabled = false;
+    btnOver.disabled = false;
+    btnRetry.disabled = false;
+    btnEqual.disabled = false;
 
     orderNumberField.innerText = orderNumber;
     // Обновляем текст вопроса только если игра начата не впервые (когда поля ввода не пустые)
@@ -110,6 +128,12 @@ function retryGame() {
 
     // Устанавливаем исходный текст для кнопки "Заново"
     btnRetry.innerText = "Заново";
+
+    // Блокируем кнопки "больше", "меньше", "заново" после нажатия "Заново"
+    btnLess.disabled = true;
+    btnOver.disabled = true;
+    btnRetry.disabled = true;
+    btnEqual.disabled = true;
 }
 
 btnRetry.addEventListener('click', retryGame);
